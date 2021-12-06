@@ -14,18 +14,18 @@ import static okhttp3.internal.Util.format;
 
 public class TestBase {
 
+    static CredentialsConfig credentials = ConfigFactory.create(CredentialsConfig.class);
+    static String login = credentials.login();
+    static String password = credentials.password();
+    static String url = System.getProperty("url", "selenoid.autotests.cloud/wd/hub/");
+
     @BeforeAll
     static void beforeAll() {
 
-        CredentialsConfig credentials =
-                (CredentialsConfig) ConfigFactory.create(CredentialsConfig.class);
-        String login = credentials.login();
-        String password = credentials.password();
-        String url = System.getProperty("url", null);
 
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
         Configuration.browserSize = "1920x1080";
-        Configuration.remote = format("https://%s:%s@%s",login,password,url);
+        Configuration.remote = format("https://%s:%s@%s", login, password, url);
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("enableVNC", true);
